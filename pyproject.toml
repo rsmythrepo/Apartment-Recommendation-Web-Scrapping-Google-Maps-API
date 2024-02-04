@@ -1,0 +1,66 @@
+[tool.poetry]
+name = "homie"
+version = "0.1.0"
+description = ""
+authors = [
+  "Raphael Smyth <raphael.smith@bts.tech>",
+  "Rogelio Martínez <aybabtumx@gmail.com>"
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.1"
+pandas = "^2.2.0"
+requests = "^2.31.0"
+beautifulsoup4 = "^4.12.3"
+selenium = "^4.17.2"
+googlemaps = "^4.10.0"
+python-dotenv = "^1.0.1"
+sqlmodel = "^0.0.14"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
