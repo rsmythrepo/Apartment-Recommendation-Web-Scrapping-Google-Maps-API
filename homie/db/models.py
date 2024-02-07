@@ -1,7 +1,7 @@
-from sqlmodel import Field, SQLModel, Relationship
 from datetime import datetime
-from typing import Optional, List
+
 from db.session import db_session
+from sqlmodel import Field, Relationship, SQLModel
 
 
 class Generic:
@@ -15,64 +15,64 @@ class Generic:
 
 
 class Flat(Generic, SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    
-    title: Optional[str]
-    description: Optional[str]    
+    id: int | None = Field(default=None, primary_key=True)
+
+    title: str | None
+    description: str | None
 
     # Metadata
-    url = Optional[str]
-    published_at: Optional[datetime]
-    updated_at: Optional[datetime]
+    url = str | None
+    published_at: datetime | None
+    updated_at: datetime | None
 
     # Price
-    price = Optional[float]  # in euros
-    price_per_m2 = Optional[float]  # in euros
+    price = float | None  # in euros
+    price_per_m2 = float | None  # in euros
 
     # Basic info
-    space = Optional[int]  # m2
-    rooms = Optional[int]
-    bathrooms = Optional[int]
-    has_balcony = Optional[bool]
-    built_on = Optional[int]  # year
-    has_heating = Optional[bool]
-    heating_type = Optional[str]
-    allow_pets = Optional[bool]
-    allow_kids = Optional[bool]
-    allow_kids = Optional[bool]
-    max_guests = Optional[int]
-    exterior = Optional[bool]
+    space = int | None  # m2
+    rooms = int | None
+    bathrooms = int | None
+    has_balcony = bool | None
+    built_on = int | None  # year
+    has_heating = bool | None
+    heating_type = str | None
+    allow_pets = bool | None
+    allow_kids = bool | None
+    allow_kids = bool | None
+    max_guests = int | None
+    exterior = bool | None
 
     # Building
-    has_elevator = Optional[bool]
+    has_elevator = bool | None
 
     # Equipment
-    has_air_conditioning = Optional[bool]
+    has_air_conditioning = bool | None
 
     # energy certification
-    has_energy_certification = Optional[bool]
-    energy_consumption = Optional[float]  # kWh/m² per year
-    energy_consumption_tag = Optional[str]  # A | B | C | D | E | F | G
-    energy_emissions = Optional[float]  # kg CO2/m² per year
-    energy_emissions_tag = Optional[str]  # A | B | C | D | E | F | G
+    has_energy_certification = bool | None
+    energy_consumption = float | None  # kWh/m² per year
+    energy_consumption_tag = str | None  # A | B | C | D | E | F | G
+    energy_emissions = float | None  # kg CO2/m² per year
+    energy_emissions_tag = str | None  # A | B | C | D | E | F | G
 
-    address: Optional[str]
+    address: str | None
 
     # todo: @raph
-    
+
     # metadata
     created_at: datetime = Field(default=datetime.now())
     services_collected: bool = Field(default=False)  # google maps api
-    source = Optional[str]  # scrapper_name | file_type | {other_source}
+    source = str | None  # scrapper_name | file_type | {other_source}
 
     is_active: bool = Field(default=True)
 
     # from google maps api
-    latitude: Optional[float]  # from gmaps
-    longitude: Optional[float]  # from gmaps
+    latitude: float | None  # from gmaps
+    longitude: float | None  # from gmaps
 
     # relationships
-    services: List["FlatService"] = Relationship(back_populates="flat")
+    services: list["FlatService"] = Relationship(back_populates="flat")
 
     def add_lat_lng(self, lat: float, lng: float) -> None:
         self.latitude = lat
@@ -80,7 +80,7 @@ class Flat(Generic, SQLModel, table=True):
         self.services_collected = True
 
     @db_session
-    def save_multiple(self, session, flats: List["Flat"]) -> None:
+    def save_multiple(self, session, flats: list["Flat"]) -> None:
         """
         Save multiple flats
         """
@@ -94,8 +94,8 @@ class FlatService(Generic, SQLModel, table=True):
     """
     From Google Maps API.
     """
-    id: Optional[int] = Field(default=None, primary_key=True)
-    
+    id: int | None = Field(default=None, primary_key=True)
+
     name: str
     vicinity: str
 
@@ -107,11 +107,11 @@ class FlatService(Generic, SQLModel, table=True):
     user_ratings_total: int
 
     types: str
-    original_type: str
+    original_type: str  # users search term
 
     # relationships
-    flat_id: Optional[int] = Field(default=None, foreign_key="flat.id")
-    flat: Optional[Flat] = Relationship(back_populates="services")
+    flat_id: int | None = Field(default=None, foreign_key="flat.id")
+    flat: Flat | None = Relationship(back_populates="services")
 
     # metadata
     created_at: datetime = Field(default=datetime.now())

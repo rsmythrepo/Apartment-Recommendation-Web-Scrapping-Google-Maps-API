@@ -1,8 +1,9 @@
 
 # Selenium allows interaction with browser (buttons)
 
-from .generics import Scrapper
 from db.models import Flat
+
+from .generics import Scrapper
 
 
 class IdealistaScrapper(Scrapper):
@@ -37,6 +38,6 @@ class IdealistaScrapper(Scrapper):
 
     def clean_price(self, price:str):
         return float(price.split("€")[0])
-    
+
     def clean_space(self, space:str):
         return int(space.split(" ")[0])

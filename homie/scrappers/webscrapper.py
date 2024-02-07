@@ -1,10 +1,11 @@
-import pandas as pd
-import time
 import re
+import time
 
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+
 
 # Get the links for each apartment page on Idealista.com
 def get_apartment_links_idealista(url):

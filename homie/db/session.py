@@ -1,4 +1,5 @@
 from sqlmodel import Session
+
 from .engine import engine
 
 
@@ -8,4 +9,3 @@ def db_session(func):
             # Perform any necessary database connection setup here
             return func(session, *args, **kwargs)
     return wrapper
-    

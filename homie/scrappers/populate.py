@@ -1,6 +1,6 @@
-from .idealista import IdealistaScrapper
 from db.models import Flat
 
+from .idealista import IdealistaScrapper
 
 if __name__ == "__main__":
     scrapper = IdealistaScrapper()
