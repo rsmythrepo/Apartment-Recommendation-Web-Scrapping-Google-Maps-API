@@ -1,4 +1,4 @@
-from db.sesion import db_session
+from homie.db.session import db_session
 from db.models import Flat, ServiceCategory, FlatService
 from sqlmodel import or_, select
 from googlemaps.api import GoogleMaps
@@ -24,8 +24,8 @@ def populate_services(session):
                 flat_service = FlatService(**service)
                 session.add(flat_service)
         
-        session.add(flat)
         flat.services_collected = True
+        flat.save()
         session.commit()
 
 
