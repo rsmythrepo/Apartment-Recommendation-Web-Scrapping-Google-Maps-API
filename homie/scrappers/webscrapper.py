@@ -1,14 +1,9 @@
-import requests
-from bs4 import BeautifulSoup
-import os
 import pandas as pd
 import time
 import re
-from urllib.request import urlopen, Request
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 # Get the links for each apartment page on Idealista.com

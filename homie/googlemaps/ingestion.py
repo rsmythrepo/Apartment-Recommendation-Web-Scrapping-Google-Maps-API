@@ -10,7 +10,7 @@ api = GoogleMaps()
 def populate_services(session):
     # retrive all the addresses from the database
     flats = session.exec(
-        select(Flat).where(Flat.services_collected == False)
+        select(Flat).where(Flat.services_collected)
     ).all()
 
     # get the services

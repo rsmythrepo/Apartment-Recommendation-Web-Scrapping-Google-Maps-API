@@ -31,38 +31,28 @@ class Flat(SQLModel, table=True):
         self.services_collected = True
 
 
-class ServiceCategory(SQLModel, table=True):
-    """
-    Defined by the user
-    """
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    description: Optional[str]
-    
-    keywords: Optional[str]
-
-    # metadata
-    is_active: bool = Field(default=True)
-    created_at: datetime = Field(default=datetime.now())
-
-
 class FlatService(SQLModel, table=True):
     """
     From Google Maps API.
     """
     id: Optional[int] = Field(default=None, primary_key=True)
+    
     name: str
-    descrption: Optional[str]
+    vicinity: str
 
     latitude: float
     longitude: float
 
+    business_status: str
+    rating: float
+    user_ratings_total: int
+
+    types: str
+    original_type: str
+
     # relationships
     flat_id: Optional[int] = Field(default=None, foreign_key="flat.id")
     flat: Optional[Flat] = Relationship(back_populates="services")
-
-    category_id: Optional[int] = Field(default=None, foreign_key="servicecategory.id")
-    category: Optional[ServiceCategory] = Relationship(back_populates="services")
 
     # metadata
     created_at: datetime = Field(default=datetime.now())
