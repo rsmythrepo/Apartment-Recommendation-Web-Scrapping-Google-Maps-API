@@ -28,7 +28,6 @@ class Flat(SQLModel, table=True):
     heating_type: str | None
     allow_pets: bool | None
     allow_kids: bool | None
-    allow_kids: bool | None
     max_guests: int | None
     exterior: bool | None
 
@@ -54,17 +53,6 @@ class Flat(SQLModel, table=True):
     source: str | None  # scrapper_name | file_type | {other_source}
 
     is_active: bool = Field(default=True)
-
-    def __init__(self, *args, **kwargs):
-        published_at = kwargs.get("published_at")
-        if published_at and isinstance(published_at, str):
-            kwargs["published_at"] = datetime.strptime(published_at, "%Y-%m-%d")
-        
-        updated_at = kwargs.get("updated_at")
-        if updated_at and isinstance(updated_at, str):
-            kwargs["updated_at"] = datetime.strptime(updated_at, "%Y-%m-%d")
-
-        super().__init__(*args, **kwargs)
 
     def add_lat_lng(self, lat: float, lng: float) -> None:
         self.latitude = lat

@@ -26,7 +26,6 @@ if __name__ == "__main__":
 
     match option:
         case "1":
-            # WIP
             file_path = "files/templates/flats.csv"  # input("Enter the file path: ")
             base_path = os.path.dirname(os.path.abspath(__file__))
             file_path = os.path.join(base_path, file_path)
