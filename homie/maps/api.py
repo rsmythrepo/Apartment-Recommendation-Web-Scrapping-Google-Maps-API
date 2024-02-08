@@ -2,8 +2,9 @@
 https://developers.google.com/maps/documentation/places/web-service
 """
 
-from homie import settings
 import googlemaps
+
+from homie import settings
 from homie.db.models import FlatService
 
 gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
@@ -21,7 +22,7 @@ class GoogleMaps:
                         'long_name': '1600',
                         'short_name': '1600',
                         'types': ['street_number']
-                    }, 
+                    },
                     {
                         'long_name': 'Amphitheatre Parkway',
                         'short_name': 'Amphitheatre Pkwy',
@@ -77,12 +78,12 @@ class GoogleMaps:
         lat = geocode_result[0]['geometry']['location']['lat']
         lng = geocode_result[0]['geometry']['location']['lng']
         return lat, lng
-        
+
     def get_services_around(self, lat: float, lng: float, service: str) -> list[FlatService]:
         """
         source: https://developers.google.com/maps/documentation/places/web-service/search-nearby
         expected payload format:
-        type: dict  
+        type: dict
         payload: {
             'html_attributions': [],
             'next_page_token': '...',
@@ -104,7 +105,9 @@ class GoogleMaps:
                         {
                             'height': 1195,
                             'html_attributions': [
-                                '<a href="https://maps.google.com/maps/contrib/115212688446356792868">Dinah&#39;s Garden Hotel</a>'
+                                '<a
+                                    href="https://maps.google.com/maps/contrib/115212688446356792868"
+                                >Dinah&#39;s Garden Hotel</a>'
                             ],
                             'photo_reference': '...',
                             'width': 1800
@@ -153,7 +156,7 @@ class GoogleMaps:
                     original_type=service
                 )
                 services.append(flat_service)
-            
+
             if not next_page_token:
                 break
 
