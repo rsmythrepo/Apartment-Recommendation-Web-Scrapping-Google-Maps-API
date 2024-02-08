@@ -1,63 +1,65 @@
 import pandas as pd
 import time
 import re
-
+import requests
+from PIL import Image
+from io import BytesIO
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
-# Get the links for each apartment page on Idealista.com
-def get_apartment_links_idealista(url):
+'''Using this as a working document'''
 
-    # TODO bypass captcha
-    links = []
+def get_data_spotahome(df_links):
+
     options = Options()
     driver = webdriver.Chrome(options=options)
-    driver.get(url)
-    time.sleep(5)
-    #driver.find_element(By.ID, 'onetrust-accept-btn-handler').click()
-    apts_links = driver.find_elements(By.CLASS_NAME, "item-info-container")
-    for a in apts_links:
-        links.append(a.find_element(By.CLASS_NAME, "item-link").get_attribute('href'))
+
+    # Dictionary of apartment details
+    data = {}
+
+    # Go through apartment links and fetch the details
+    for apartment_url in df_links['urls'][:5]:
+        try:
+            # Go to apartment url
+            driver.get(apartment_url)
+            time.sleep(1)
+
+            # Get the cover image
+            #image_url = driver.find_element(By.XPATH,"//*[@id='root']/div/section/div[1]/div[1]/div/div[2]/div[1]']").get_attribute("src")
+            #print(image_url)
+            #response = requests.get(image_url)
+            #if response.status_code == 200:
+            #    image = Image.open(BytesIO(response.content))
+
+            title = driver.find_element(By.XPATH, '//*[@id="root"]/div/section/div[1]/div[3]/div[2]/span/h1').text.strip()
+            price = driver.find_element(By.XPATH, '//*[@id="root"]/div/section/div[1]/div[3]/div[4]/div[2]/section/div/div/div[1]/div[1]/div[1]/p[2]').text.strip()
+            deposit = driver.find_element(By.XPATH, '//*[@id="root"]/div/section/div[1]/div[3]/div[4]/div[2]/section/div/div/div[1]/div[2]/div[1]/p').text.strip()
+            bathrooms = driver.find_element(By.XPATH, '//*[@id="root"]/div/section/div[1]/div[3]/div[2]/div[1]/span[3]/strong').text.strip()
+            rooms = driver.find_element(By.XPATH, '//*[@id="root"]/div/section/div[1]/div[3]/div[2]/div[1]/span[2]/strong').text.strip()
+
+            data[apartment_url] = {
+                'title': title,
+                'price': price,
+                'deposit': deposit,
+                'bathrooms': bathrooms,
+                'rooms': rooms
+            }
+        except NoSuchElementException as e:
+            print(f"Failed to extract details for apartment: {apartment_url}. Error: {e}")
+            continue
+
     driver.quit()
-    return apts_links
-
-# Get the links for each apartment page on apartmentbarcelona.com
-def get_apartment_links_ap_bcn(url):
-
-    sub1 = "window.open('"
-    sub2 = "');"
-    s = str(re.escape(sub1))
-    e = str(re.escape(sub2))
-    links = []
-    options = Options()
-    driver = webdriver.Chrome(options=options)
-    driver.get(url)
-
-    time.sleep(3)
-    driver.find_element(By.ID, 'btnCookieAgree').click()
-    apts_links = driver.find_elements(By.CSS_SELECTOR, '.card.col-xs-12.pointer')
-    time.sleep(3)
-    for a in apts_links:
-        string = a.find_element(By.CSS_SELECTOR, '.card-block.text-size-9').get_attribute('onclick')
-        link = re.findall(s + "(.*)" + e, string)[0]
-        links.append("https://www.apartmentbarcelona.com/" + link)
-
-    # TODO click next page
-
-    df = pd.DataFrame(links)
-    df = df.rename(columns={0: 'urls'})
-    # df.to_csv('urls_t.csv')
-    driver.quit()
-    return df
-
+    return data
 
 if __name__ == '__main__':
 
-    # TODO how to bypass captcha
-    idealista_url = "https://www.idealista.com/en/alquiler-viviendas/barcelona-barcelona/"
-    # print(get_apartment_links_idealista(idealista_url))
+    df_links = pd.read_csv("../../Data/spotahome_links.csv")
+    print(get_data_spotahome(df_links))
 
-    apartment_bcn_url = "https://www.apartmentbarcelona.com/es/alquileres-medio-largo-plazo/eur/?s=1"
-    print(get_apartment_links_ap_bcn(apartment_bcn_url))
+
+
+
+
 
