@@ -2,7 +2,11 @@ from db.models import Flat
 
 from .idealista import IdealistaScrapper
 
-if __name__ == "__main__":
+
+def run():
+    """
+    NOT WORKING. JUST AN EXAMPLE.
+    """
     scrapper = IdealistaScrapper()
     scrapper.load_page("https://www.idealista.com/alquiler-viviendas/barcelona-barcelona/")
 
@@ -16,3 +20,7 @@ if __name__ == "__main__":
     for flat in flats:
         flat = scrapper.flat_details(flat)
         flat.save()
+
+
+if __name__ == "__main__":
+    run()
