@@ -1,20 +1,19 @@
-from db.models import Flat, FlatService
 from maps.api import GoogleMaps
 from sqlmodel import select
 
 from homie.db.session import db_session
+from homie.db.models import PostalCode
 
-api = GoogleMaps()
+maps_api = GoogleMaps()
 
 @db_session
 def populate_services(session):
     # retrive all the addresses from the database
     flats = session.exec(
-        select(Flat).where(stage=DATA_COLLECTED)
+        select(PostalCode).where(not PostalCode.services_collected)
     ).all()
 
-    # get the services
-    services = session.query(FlatService).all()
+    flat_postal_codes = list(set([flat.postal_code for flat in flats]))
 
     for flat in flats:
         for service in services:

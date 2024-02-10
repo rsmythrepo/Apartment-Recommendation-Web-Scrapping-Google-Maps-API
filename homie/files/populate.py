@@ -1,10 +1,10 @@
 import os
 
-from .csv import CSVUploader
+from homie.files.csv import FlatCSVUploader
 
 
 def run(file_path: str):
-    csv_uploader = CSVUploader()
+    csv_uploader = FlatCSVUploader()
     csv_uploader.populate(file_path)
 
 

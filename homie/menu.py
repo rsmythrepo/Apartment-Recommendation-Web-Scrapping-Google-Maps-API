@@ -1,8 +1,8 @@
 import logging
-
-from db.engine import create_db_and_tables
 import os
-from files.populate import run as files_populate
+
+from homie.db.engine import create_db_and_tables
+from homie.files.populate import run as files_populate
 
 """
 from maps.populate import run as googlemaps_populate
@@ -14,15 +14,15 @@ logger = logging.getLogger("homie")
 
 
 if __name__ == "__main__":
+    logger.info("Creating database and tables")
+    create_db_and_tables()
+
     print("SELECT AN OPTION")
     print("1. Populate database from CSV")
     print("2. Populate database from scrappers")
     print("3. Search for services using Google Maps API")
 
     option = input("Option: ")
-
-    logger.info("Creating database and tables")
-    create_db_and_tables()
 
     match option:
         case "1":

@@ -3,6 +3,22 @@ from datetime import datetime
 from sqlmodel import Field, Relationship, SQLModel
 
 
+class PostalCode(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+    code: str
+    district: str | None
+
+    services_collected: bool = Field(default=False)
+
+    # metadata
+    created_at: datetime = Field(default=datetime.now())
+    updated_at: datetime = Field(default=datetime.now())
+
+    flats: list["Flat"] = Relationship(back_populates="postal_code")
+    services: list["Service"] = Relationship(back_populates="postal_code")
+
+
 class Flat(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
@@ -45,18 +61,19 @@ class Flat(SQLModel, table=True):
     energy_emissions_tag: str | None  # A | B | C | D | E | F | G
 
     # address
-    postal_code: str | None
+    postal_code_str: str | None
     district: str | None
+
+    # foreign key   
+    postal_code_id: int | None = Field(default=None, foreign_key="postalcode.id")
+    postal_code: PostalCode | None = Relationship(back_populates="flats")
+    
 
     # metadata
     created_at: datetime = Field(default=datetime.now())
     source: str | None  # scrapper_name | file_type | {other_source}
 
     is_active: bool = Field(default=True)
-
-    def add_lat_lng(self, lat: float, lng: float) -> None:
-        self.latitude = lat
-        self.longitude = lng
 
 
 class Service(SQLModel, table=True):
@@ -78,20 +95,9 @@ class Service(SQLModel, table=True):
     types: str
     original_type: str  # users search term
 
-    postal_code: str | None
+    # foreign key
+    postal_code_id: int | None = Field(default=None, foreign_key="postalcode.id")
+    postal_code: PostalCode | None = Relationship(back_populates="services")
 
     # metadata
     created_at: datetime = Field(default=datetime.now())
-
-
-class PostalCode(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-
-    code: str
-    district: str | None
-
-    services_collected: bool = Field(default=False)
-
-    # metadata
-    created_at: datetime = Field(default=datetime.now())
-    updated_at: datetime = Field(default=datetime.now())
