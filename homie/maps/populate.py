@@ -1,33 +1,28 @@
 from maps.api import GoogleMaps
 from sqlmodel import select
 
-from homie.db.session import db_session
 from homie.db.models import PostalCode
+from homie.db.session import db_session
+from homie.settings import SERVICES
 
 maps_api = GoogleMaps()
 
 @db_session
 def populate_services(session):
     # retrive all the addresses from the database
-    flats = session.exec(
-        select(PostalCode).where(not PostalCode.services_collected)
+    postal_codes = session.exec(
+        select(PostalCode).where(PostalCode.services_collected != True).distinct(PostalCode.code)  # noqa
     ).all()
 
-    flat_postal_codes = list(set([flat.postal_code for flat in flats]))
+    service_terms = SERVICES.split(",")
 
-    for flat in flats:
-        for service in services:
-            locations = api.get_services_locations(flat, service.name)
-            for location in locations:
-                # todo: define services object
-                flat_service = FlatService(**location)
-                session.add(flat_service)
+    for postal_code in postal_codes:
+        for term in service_terms:
+            services = maps_api.get_services_by_postal_code(term, postal_code)
+            session.bulk_save_objects(services)
 
-        if flat.lat and flat.lng:
-            flat.stage = COORDINATES_COLLECTED
-        else:
-            flat.stage = SERVICES_COLLECTED
-        session.add(flat)
+        postal_code.services_collected = True
+        session.add(postal_code)
         session.commit()
 
 def run():

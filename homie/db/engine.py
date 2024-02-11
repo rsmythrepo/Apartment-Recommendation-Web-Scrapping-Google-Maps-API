@@ -1,6 +1,5 @@
 from sqlmodel import SQLModel, create_engine
 
-
 sqlite_url = "sqlite:///./homie.db"
 engine = create_engine(sqlite_url, echo=True)
 

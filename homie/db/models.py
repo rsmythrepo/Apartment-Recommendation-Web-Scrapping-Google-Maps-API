@@ -64,10 +64,9 @@ class Flat(SQLModel, table=True):
     postal_code_str: str | None
     district: str | None
 
-    # foreign key   
+    # foreign key
     postal_code_id: int | None = Field(default=None, foreign_key="postalcode.id")
     postal_code: PostalCode | None = Relationship(back_populates="flats")
-    
 
     # metadata
     created_at: datetime = Field(default=datetime.now())
@@ -83,7 +82,7 @@ class Service(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
     name: str
-    vicinity: str
+    formatted_address: str
 
     latitude: float
     longitude: float

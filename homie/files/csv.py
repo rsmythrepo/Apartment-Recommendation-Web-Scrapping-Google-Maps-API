@@ -4,8 +4,8 @@ import os
 from datetime import datetime
 
 from homie.db.models import Flat
-from homie.db.session import db_session
 from homie.db.queries import get_or_create_postal_code
+from homie.db.session import db_session
 
 logger = logging.getLogger("homie")
 
@@ -27,7 +27,7 @@ class CSVUploader:
 
         with open(file_path) as file:
             reader = csv.DictReader(file)
-            data = [row for row in reader]
+            data = list(reader)
             return data
 
     @db_session

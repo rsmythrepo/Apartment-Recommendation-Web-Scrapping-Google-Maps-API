@@ -3,12 +3,7 @@ import os
 
 from homie.db.engine import create_db_and_tables
 from homie.files.populate import run as files_populate
-
-"""
-from maps.populate import run as googlemaps_populate
-from scrappers.populate import run as scrappers_populate
-
-"""
+from homie.maps.populate import run as googlemaps_populate
 
 logger = logging.getLogger("homie")
 
@@ -36,7 +31,7 @@ if __name__ == "__main__":
             pass
         case "3":
             # WIP
-            # googlemaps_populate()
+            googlemaps_populate()
             pass
         case _:
             logger.error("Invalid option")
