@@ -25,6 +25,16 @@ print(df.isnull().sum())
 df['price_per_month'] = df['price_per_month'].str.replace('£', '').str.replace('pcm', '').str.replace(',', '').astype(int)
 df['price_per_week'] = df['price_per_week'].str.replace('£', '').str.replace('pw', '').str.replace(',', '').astype(int)
 
+# Clean deposit
+df['deposit'] = df['deposit'].replace('Ask agent', '0')
+def clean_and_convert_currency(currency):
+    cleaned_currency = currency.replace('£', '').replace(',', '')  # Remove currency symbol and commas
+    return int(cleaned_currency)  # Convert to integer
+
+# Apply the function to the 'price' column
+df['deposit'] = df['deposit'].apply(lambda x: clean_and_convert_currency(x))
+df['deposit'] = df['deposit'].replace(0, None)
+
 # Replace non-numeric values in 'bathrooms' and 'bedrooms' with NaN
 df['bathrooms'] = pd.to_numeric(df['bathrooms'], errors='coerce')
 df['bedrooms'] = pd.to_numeric(df['bedrooms'], errors='coerce')
@@ -43,10 +53,11 @@ def extract_second_number(dimensions):
 
 # Apply the extraction function to create a new column
 df['dimensions_sq_m'] = df['dimensions'].apply(extract_second_number)
-df.drop("dimensions", axis='columns')
+df.drop("dimensions", axis='columns', inplace=True)
 
 print(df.head())
 print(df.info())
+print(df.describe())
 
 '''Plot the data'''
 # Plot the distribution of prices

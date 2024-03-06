@@ -104,7 +104,7 @@ class HousingAnywhereScrapper(Scrapper):
         data = {}
 
         # Go through apartment links and fetch the details
-        for apartment_url in df_links['urls'][:10]:
+        for apartment_url in df_links['urls']:
             try:
                 # Go to apartment url
                 self.agent.get(apartment_url)
@@ -134,7 +134,10 @@ class HousingAnywhereScrapper(Scrapper):
                 house_type = apartment_details[0].text.strip()
                 dimensions = apartment_details[1].text.strip()
                 furnish_type = apartment_details[2].text.strip()
-                bedrooms = apartment_details[4].text.strip()
+                try:
+                    bedrooms = apartment_details[4].text.strip()
+                except:
+                    bedrooms = apartment_details[3].text.strip()
 
                 min_tenancy = self.agent.find_element(By.XPATH, '//*[@id="rental-conditions"]/div/div/div/div[2]/div/div[2]').text.strip()
                 deposit = self.agent.find_element(By.XPATH, '//*[@id="rental-conditions"]/div/div/div/div[3]/div/div[2]').text.strip()
@@ -182,7 +185,7 @@ class HousingAnywhereScrapper(Scrapper):
         self.agent.quit()
         # Convert the dictionary to a DataFrame
         df = pd.DataFrame(data.values(), index=data.keys())
-        df.to_csv("../../Data/raw/apartmentsanywhere_data.csv")
+        df.to_csv("../../Data/raw/housinganywhere_data.csv")
 
         return data
 
