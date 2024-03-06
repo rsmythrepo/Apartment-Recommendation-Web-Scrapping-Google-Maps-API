@@ -4,7 +4,6 @@ import os
 from datetime import datetime
 
 from homie.db.models import Flat
-from homie.db.queries import get_or_create_postal_code
 from homie.db.session import db_session
 
 logger = logging.getLogger("homie")
@@ -12,6 +11,7 @@ logger = logging.getLogger("homie")
 
 class CSVUploader:
     source = "csv"
+    dt_format = "%Y-%m-%d"
 
     class Meta:
         model = None
@@ -38,7 +38,7 @@ class CSVUploader:
         for field in self.Meta.datetime_fields:
             value = data.get(field)
             if value:
-                data[field] = datetime.strptime(value, "%Y-%m-%d")
+                data[field] = datetime.strptime(value, self.dt_format)
             else:
                 data[field] = None
 
@@ -76,7 +76,7 @@ class FlatCSVUploader(CSVUploader):
             "has_energy_certification"
         ]
         float_fields = [
-            "price", "price_per_m2", "energy_consumption", "energy_emissions"
+            "price", "price_per_m2", "energy_consumption", "energy_emissions", "lat", "lng"
         ]
         int_fields = ["space", "rooms", "bathrooms", "built_on", "max_guests"]
 
@@ -86,10 +86,6 @@ class FlatCSVUploader(CSVUploader):
 
         for data in objs_data:
             data = self.format_data(data)
-            if not data.get("postal_code") and data.get("postal_code_str"):
-                data["postal_code_id"] = get_or_create_postal_code(
-                    data["postal_code_str"]
-                ).id
             obj = Flat(**data, source=self.source)
             session.add(obj)
         session.commit()

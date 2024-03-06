@@ -18,6 +18,7 @@ selenium = "^4.17.2"
 googlemaps = "^4.10.0"
 python-dotenv = "^1.0.1"
 sqlmodel = "^0.0.14"
+streamlit = "^1.31.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.15"

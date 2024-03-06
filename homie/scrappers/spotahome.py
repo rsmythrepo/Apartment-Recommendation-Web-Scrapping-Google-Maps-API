@@ -1,15 +1,14 @@
-import re
 import time
+
 import pandas as pd
-import requests
-from PIL import Image
-from io import BytesIO
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 from .generics import Scrapper
+
+
 class Spotahome(Scrapper):
 
     """
@@ -52,7 +51,7 @@ class Spotahome(Scrapper):
                 continue
 
             try:
-                xpath = f"//*[@id='search-scroll']/div[2]/div[3]/button[2]"
+                xpath = "//*[@id='search-scroll']/div[2]/div[3]/button[2]"
                 next_page = driver.find_element(By.XPATH, xpath)
                 next_page.click()
                 time.sleep(1)

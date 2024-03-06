@@ -1,15 +1,18 @@
 import re
 import time
+from io import BytesIO
+
 import pandas as pd
 import requests
 from PIL import Image
-from io import BytesIO
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 from .generics import Scrapper
+
+
 class ApartmentBCN(Scrapper):
 
     """
