@@ -1,13 +1,10 @@
-import pandas as pd
 import time
-import re
-import requests
-from PIL import Image
-from io import BytesIO
+
+import pandas as pd
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 '''Using this as a working document'''
 
