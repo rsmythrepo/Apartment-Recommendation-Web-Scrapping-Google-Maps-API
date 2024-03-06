@@ -2,7 +2,7 @@ import logging
 import random
 import time
 
-from db.models import Flat
+#from db.models import Flat
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -108,7 +108,7 @@ class Scrapper:
         """
         Sleep randomly
         """
-        time.sleep(random.randint(1, 5))
+        time.sleep(random.randint(1, 10))
 
     def wait_for_item_randomly(self, css_selector) -> None:
         """
@@ -148,7 +148,7 @@ class Scrapper:
             return True
         return False
 
-    def list_flats(self) -> list[Flat]:
-        """
-        Return a list of flats
-        """
+    #def list_flats(self) -> list[Flat]:
+    #    """
+    #    Return a list of flats
+    #    """
