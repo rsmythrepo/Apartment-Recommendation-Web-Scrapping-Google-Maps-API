@@ -31,37 +31,25 @@ class CSVUploader:
             return data
 
     @db_session
-    def populate(self, file_path: str, session=None):
+    def populate(self, file, session=None):
         pass
 
     def format_data(self, data):
         for field in self.Meta.datetime_fields:
             value = data.get(field)
-            if value:
-                data[field] = datetime.strptime(value, self.dt_format)
-            else:
-                data[field] = None
+            data[field] = datetime.strptime(value, self.dt_format) if value else None
 
         for field in self.Meta.bool_fields:
             value = data.get(field)
-            if value:
-                data[field] = value.lower() == "true"
-            else:
-                data[field] = None
+            data[field] = value.lower() == "true" if value else None
 
         for field in self.Meta.float_fields:
             value = data.get(field)
-            if value:
-                data[field] = float(value)
-            else:
-                data[field] = None
+            data[field] = float(value) if value else None
 
         for field in self.Meta.int_fields:
             value = data.get(field)
-            if value:
-                data[field] = int(value)
-            else:
-                data[field] = None
+            data[field] = int(value) if value else None
 
         return data
 
@@ -81,8 +69,8 @@ class FlatCSVUploader(CSVUploader):
         int_fields = ["space", "rooms", "bathrooms", "built_on", "max_guests"]
 
     @db_session
-    def populate(self, file_path: str, session=None):
-        objs_data = self.read_file(file_path)
+    def populate(self, file, session=None):
+        objs_data = self.read_file(file)
 
         for data in objs_data:
             data = self.format_data(data)

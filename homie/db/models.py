@@ -42,7 +42,7 @@ class Flat(SQLModel, table=True):
     # address
     postal_code_str: str | None
     district: str | None
-    
+
     # from google maps api
     lat: float | None  # from gmaps
     lng: float | None  # from gmaps
@@ -54,6 +54,9 @@ class Flat(SQLModel, table=True):
     is_active: bool = Field(default=True)
 
     services_collected: bool = Field(default=False)
+
+    # relationships
+    services: list["Service"] = Relationship(back_populates="flat")
 
     @property
     def price_per_room(self) -> float:

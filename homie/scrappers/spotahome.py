@@ -1,11 +1,11 @@
-import re
+import logging
 import time
+
 import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
-import logging
+from selenium.webdriver.common.by import By
+
 from homie.scrappers.generics import Scrapper
 
 logger = logging.getLogger("homie")
@@ -54,7 +54,7 @@ class SpotahomeScrapper(Scrapper):
                 continue
 
             try:
-                xpath = f"//*[@id='search-scroll']/div[2]/div[3]/button[2]"
+                xpath = "//*[@id='search-scroll']/div[2]/div[3]/button[2]"
                 next_page = self.agent.find_element(By.XPATH, xpath)
                 next_page.click()
                 time.sleep(1)

@@ -1,7 +1,8 @@
-import pandas as pd
 import re
-import seaborn as sns
+
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 # Load your CSV file into a Pandas DataFrame
 df = pd.read_csv('../../Data/raw/rightmoves_data.csv')

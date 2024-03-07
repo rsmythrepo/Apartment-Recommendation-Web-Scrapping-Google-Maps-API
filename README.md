@@ -1,82 +1,34 @@
 # Homie
-This is a Python (+3.11) with poetry.
 
-## Install
-```sh
-poetry install
-```
+This is a Python (+3.11) project with poetry to find the perfect place in any city of your preference.
 
-Add new depedencies:
-```sh
-poetry add {dependency}
-```
+By: Rogelio Martínez & Raphaelle Smyth
+
+## How it works
+1. Ingest the data from a CSV file or a scrapper
+2. Run the Google Maps to find all services around
+3. It will score and rank all places relevant base on your preferences.
+
+## Settings
+You need to create a .env file with the following vars
+* `GOOGLE_MAPS_API_KEY`: TBD
+* `GOOGLE_MAPS_DEFAULT_RADIUS`: TBD
+* `SERVICES`: TBD
 
 ## Run
 ```sh
-poetry run python your-script.py
+poetry run python menu.py
 ```
 
-### Ennviroment variables
-Create a file `.env` in the root of the project
-See also: `homie.settings.py`
-
-These are the expected vars:
-* GOOGLE_MAPS_API_KEY
-
-
-## Linting
-```sh
-poetry run ruff --fix
-```
-
-## Database
-SQLite is used with SQLModel using Pydantic and SQLAlchemy
-
-## Gatering data
-
-### Database
-*Create or update an object*
-```python
-from db.session import db_session
-
-@db_session  # will create/close a session and inject it into the function
-def create_flat(session):
-    flat = Flat(
-      name="Amazing Flat in Barcelona",
-      postalcode="08135",
-      ...
-    )
-    session.add(flat)  # if flat.id is None will crete a new flat and assign an id automatically
-    session.commit()
-```
-
-
-*Save multiple objects*
-```python
-from db.session import db_session
-
-@db_session  # will create/close a session and inject it into the function
-def get_flats(session, flats: list[Flat]):
-    # SQLModel (Flat) objects are necessary to save data into the db
-    for flat in flats:
-        session.add(flat)
-    
-    session.commit()  # commit to save all flats added to the sessions
-```
-
-
-### Google Maps API
-* Google API https://mapsplatform.google.com/
-  * Pricing: https://mapsplatform.google.com/pricing/
-
-### Scrappers
-* idealista (url)
-* [TODO]
-
+## Ingest the data
 ### CSV
-* CSV load supported
-* All items must be separeted by a comma ","
-* All datetime value must be str in ISO-datetime format
+Load a CSV file.
 
-## Tests
-[TODO]
+### Scrapper
+List of scrappers and supported cities:
+* TBD: TBD
+* TBD: TBD
+
+
+
+## Development

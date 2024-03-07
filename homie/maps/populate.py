@@ -1,5 +1,5 @@
 from maps.api import GoogleMaps
-from sqlmodel import select, or_, not_
+from sqlmodel import not_, or_, select
 
 from homie.db.models import Flat, Service
 from homie.db.session import db_session
@@ -19,7 +19,7 @@ def populate_services(session):
 
     for flat in flats:
         for category in cateogories:
-            services = maps_api.get_flat_services(flat, category.name)
+            services = maps_api.get_services_by_coordinates(flat, category.name)
             for service in services:
                 # todo: define services object
                 flat_service = Service(**service)
