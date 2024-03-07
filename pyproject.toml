@@ -19,9 +19,12 @@ googlemaps = "^4.10.0"
 python-dotenv = "^1.0.1"
 sqlmodel = "^0.0.14"
 streamlit = "^1.31.1"
+matplotlib = "^3.8.3"
+seaborn = "^0.13.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.15"
+ipykernel = "^6.29.3"
 
 [build-system]
 requires = ["poetry-core"]

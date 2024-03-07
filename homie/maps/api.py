@@ -5,7 +5,7 @@ https://developers.google.com/maps/documentation/places/web-service
 import googlemaps
 
 from homie import settings
-from homie.db.models import PostalCode, Service
+from homie.db.models import Service
 
 gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
 
@@ -75,8 +75,11 @@ class GoogleMaps:
         ]
         """
         geocode_result = gmaps.geocode(address)
-        lat = geocode_result[0]['geometry']['location']['lat']
-        lng = geocode_result[0]['geometry']['location']['lng']
+        lat = None
+        lng = None
+        if geocode_result:
+            lat = geocode_result[0]['geometry']['location']['lat']
+            lng = geocode_result[0]['geometry']['location']['lng']
         return lat, lng
 
     def get_services_by_coordinates(self, lat: float, lng: float, term: str) -> list[Service]:
@@ -132,38 +135,31 @@ class GoogleMaps:
         }
         """
         services = []
-        next_page_token = None
 
-        while True:
-            payload = gmaps.places_nearby(
-                location=(lat, lng),
-                type=term,
-                radius=settings.GOOGLE_MAPS_DEFAULT_RADIUS,
-                pagetoken=next_page_token
+        payload = gmaps.places_nearby(
+            location=(lat, lng),
+            type=term,
+            radius=settings.GOOGLE_MAPS_DEFAULT_RADIUS,
+        )
+
+        for place in payload['results']:
+            service = Service(
+                name=place['name'],
+                business_status=place['business_status'],
+                rating=place['rating'],
+                types=",".join(place['types']),
+                user_ratings_total=place['user_ratings_total'],
+                vicinity=place['vicinity'],
+                original_type=term,
+                latitude=place['geometry']['location']['lat'],
+                longitude=place['geometry']['location']['lng']
             )
-
-            next_page_token = payload.get('next_page_token')
-            for place in payload['results']:
-                service = Service(
-                    name=place['name'],
-                    business_status=place['business_status'],
-                    rating=place['rating'],
-                    types=",".join(place['types']),
-                    user_ratings_total=place['user_ratings_total'],
-                    vicinity=place['vicinity'],
-                    original_type=term,
-                    latitude=place['geometry']['location']['lat'],
-                    longitude=place['geometry']['location']['lng']
-                )
-                services.append(service)
-
-            if not next_page_token:
-                break
+            services.append(service)
 
         return services
 
     def get_services_by_postal_code(
-            self, term: str, postal_code: PostalCode
+            self, term: str, postal_code
     ) -> list[Service]:
         services = []
         search_term = f"{term} near {postal_code.code}"
